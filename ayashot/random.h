@@ -5,66 +5,74 @@
 
 class random_t{
     private:
-        u64 seed1,seed2;
-        static const u64 multiplier=0x5DEECE66DL;
-        static const u64 addend    =0xBL;
-        static const u64 mask      =(1LL << 48) - 1;
-
-        u64 xor_shift_64(){
-            seed1 ^= seed1 << 43;
-            seed1 ^= seed1 >> 29;
-            seed1 ^= seed1 << 34;
-            return seed1;
+        static inline u32 rotl(const u32 x, int k) {
+            return (x << k) | (x >> (32 - k));
         }
-
-        u64 linear_next_64(){
-            seed2 =(seed2 * multiplier + addend) & mask;
-            return seed2;
-        }
-
-        u64 next(){
-            return xor_shift_64() ^ linear_next_64();
-        }
-
-        u64 next_bits(const int n){
-            return next()>>(64 - n);
-        }
-
-        f64 nextf(){
-            return (double)(((long long)(next_bits(26)) << 27) + next_bits(27)) / (double)(1LL << 53);
-        }
-    
+        u32 seed[2];
     public:
-        random_t():seed1(0xA2B4C6D8E7F5A3B1),seed2(0x1B2D3F4B5D6F7B){}
+        // Return a 32bits unsigned integer.
+        u32 next32() {
+            const u32 s0 = seed[0]; u32 s1 = seed[1];
+            const u32 result = rotl(s0 * 0x9E3779BB, 5) * 5;
+            s1 ^= s0;
+            seed[0] = rotl(s0, 26) ^ s1 ^ (s1 << 9);
+            seed[1] = rotl(s1, 13);
+            return result;
+        }
 
-        void set_seed(const u64 _seed){seed1=seed2=_seed;}
-        void set_seed(const std::string _seed){seed1=seed2=__aya_hash_string(_seed);}
+        // Return a 64bits unsigned integer.
+        u64 next64(){
+            return (u64) next32() << 32 | next32();
+        }
+
+        // Return a 64bits unsigned integer in [0,2^n).
+        u64 next_bits(const int n){
+            return next64() >> (64 - n);
+        }
+
+        // Return a 32bits unsigned integer in [0,n).
+        u32 next32(const u32 n){
+            return 1ull * n * next32() >> 32;
+        }
         
-        int next_int   (){return next() & 0x7FFFFFFF;}
-        int next_llong (){return next() & 0x7FFFFFFFFFFFFFFF;}
-        u32 next_uint  (){return next() & 0xFFFFFFFF;}
-        u64 next_ullong(){return next();}
-        f64 next_double(){return nextf();}
-
-        template <typename T>
-        T next(const T n){
-            return next() % (n + 1);
+        // Return a 64bits unsigned integer in [0,n).
+        u64 next64(const u64 n){
+            u64 limit = ULLONG_MAX / n * n,val;
+            while((val = next64()) > limit);
+            return val % n;
         }
 
-        template <typename T>
-        T nextf(const T n){
-            return nextf() * n;
+        // Return a 32bits unsigned integer in [l,r].
+        u32 next32(u32 l,u32 r){
+            return l + next32(r - l + 1);
         }
 
-        template <typename T>
-        T next(const T left,const T right){
-            if(left <= 0 && 0<= right) return -next(-left) + next(right);
-            return left + next(right - left + 1);
+        // Return a 64bits unsigned integer in [l,r].
+        u64 next64(u64 l,u64 r){
+            return l + next64(r - l + 1);
         }
 
-        template <typename T>
-        T nextf(const T left,const T right){
-            return left + nextf(right - left);
+        // Return a 32bits integer in [l,r].
+        int next32(int l,int r){
+            return l + next32(r - l + 1);
+        }
+
+        // Return a 64bits integer in [l,r].
+        i64 next64(i64 l,i64 r){
+            return l + next64(r - l + 1);
+        }
+
+        random_t():seed{0x11111111,0x77777777}{}
+
+        // Set the seed with a 64bits unsigned integer.
+        void set_seed(const u64 _seed){
+            seed[0] =_seed & 0xFFFFFFFF;
+            seed[1] =_seed >> 32;
+        }
+        void set_seed(const std::string _seed){
+            u64 _seed0 = __aya_hash_string(_seed);
+            seed[0] =_seed0 & 0xFFFFFFFF;
+            seed[1] =_seed0 >> 32;
         }
 
         template <typename C>
