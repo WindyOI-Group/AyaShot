@@ -3,23 +3,32 @@
 
 #define VERSION "0.0.1"
 
+//Tools
+#include <cstdlib>
+#include <cstdio>
+#include <functional>
+
+//Limits Header
+#include <climits>
+
+//Strings
+#include <cctype>
+#include <cstring>
+
 //Container
 #include <string>
 #include <vector>
 #include <map>
 #include <unordered_map>
 #include <set>
+#include <iterator>
 
-#include <cstdio>
-#include <cctype>
-#include <cstddef>
+//Math
 #include <cmath>
-#include <cstring>
 
+//File IO
 #include <iostream>
-#include <limits>
-#include <functional>
-#include <stdio.h>
+
 
 //short for some typenames.
 typedef int                __aya_i32;
@@ -56,7 +65,6 @@ namespace Tools{
 
 #define __aya_up(l,r,i) for(int i=l,END##i=r;i<=END##i;++i)
 #define __aya_dn(r,l,i) for(int i=r,END##i=l;i>=END##i;--i)
-
 //Hash table.
 std::hash <__aya_u64> __aya_hash_ullong;
 
