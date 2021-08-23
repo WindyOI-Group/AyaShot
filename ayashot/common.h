@@ -70,4 +70,4 @@ std::hash <std::string> __aya_hash_string;
 
 const int MAX_BUF = 1 << 20;
 char __aya_buf1[MAX_BUF];
-char __aya_buf2[MAX_BUF];
+char __aya_buf2[MAX_BUF]; 

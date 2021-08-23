@@ -156,4 +156,4 @@ public:
 		if (min_value)
 			for (int32_t i = 0;i < n;++i) V[i] += min_value;
 	}
-};
+}; 

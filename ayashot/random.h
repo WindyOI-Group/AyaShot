@@ -1,5 +1,4 @@
-#ifndef AYA_RANDOM_H
-#define AYA_RANDOM_H
+#pragma once
 
 #include"common.h"
 
@@ -109,5 +108,3 @@ public:
         return *(left + next32(right - left - 1));
     }
 }__aya_random;
-
-#endif

@@ -97,4 +97,4 @@ public:
     void write(const T n);
     template <typename T>
     void writeln(const T& n){ write(n), write('\n'); }
-};
+}; 
