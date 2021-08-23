@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common.h"
-#include "random.h"
+#include "common.hpp"
+#include "random.hpp"
 
 typedef std::pair<uint64_t, uint64_t> __aya_u64_u64;
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include"common.h"
-#include"random.h"
+#include"common.hpp"
+#include"random.hpp"
 
 template <typename value_type = int32_t>
 class Poly{

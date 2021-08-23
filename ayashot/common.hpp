@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <functional>
 #include <cstdarg>
+#include <algorithm>
 
 //Limits Header
 #include <climits>
