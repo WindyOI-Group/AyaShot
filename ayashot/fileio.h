@@ -19,14 +19,14 @@ private:
         return n <= 9?'0' + n:'A' + n - 10;
     }
     void write32(const uint32_t n, const int32_t b = 10){
-        int32_t t = MAX_BUF; uint32_t m = n;
-        do __aya_buf1[t--] = to_digit(m % b), m /= b; while (m);
-        fwrite(__aya_buf1 + t + 1, 1, MAX_BUF - t, file);
+        int32_t t = Aya::MAX_BUF; uint32_t m = n;
+        do Aya::__aya_buf1[t--] = to_digit(m % b), m /= b; while (m);
+        fwrite(Aya::__aya_buf1 + t + 1, 1, Aya::MAX_BUF - t, file);
     }
     void write64(const uint64_t n, const int32_t b = 10){
-        int32_t t = MAX_BUF;  uint64_t m = n;
-        do __aya_buf1[t--] = to_digit(m % b), m /= b; while (m);
-        fwrite(__aya_buf1 + t + 1, 1, MAX_BUF - t, file);
+        int32_t t = Aya::MAX_BUF;  uint64_t m = n;
+        do Aya::__aya_buf1[t--] = to_digit(m % b), m /= b; while (m);
+        fwrite(Aya::__aya_buf1 + t + 1, 1, Aya::MAX_BUF - t, file);
     }
 public:
     int32_t SUBTASK, NUMBER;

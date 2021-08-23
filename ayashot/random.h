@@ -2,14 +2,6 @@
 
 #include"common.h"
 
-
-#define random __random_deprecated
-#include <stdlib.h>
-#include <cstdlib>
-#include <climits>
-#include <algorithm>
-#undef random
-
 class random_t{
 private:
     static inline uint32_t rotl(const uint32_t x, int32_t k) {
@@ -93,7 +85,7 @@ public:
         seed[1] =_seed >> 32;
     }
     void set_seed(const std::string _seed){
-        uint64_t _seed0 = __aya_hash_string(_seed);
+        uint64_t _seed0 = Aya::__aya_hash_string(_seed);
         seed[0] =_seed0 & 0xFFFFFFFF;
         seed[1] =_seed0 >> 32;
     }

@@ -63,11 +63,14 @@ namespace Tools{
     } // namespace Float2Integer
 } // namespace Tools
 
-//Hash table.
-std::hash <uint64_t> __aya_hash_ullong;
+namespace Aya{
+    //Hash table.
+    std::hash <uint64_t> __aya_hash_ullong;
 
-std::hash <std::string> __aya_hash_string;
+    std::hash <std::string> __aya_hash_string;
 
-const int MAX_BUF = 1 << 20;
-char __aya_buf1[MAX_BUF];
-char __aya_buf2[MAX_BUF]; 
+    const int MAX_BUF = 1 << 20;
+    char __aya_buf1[MAX_BUF];
+    char __aya_buf2[MAX_BUF]; 
+}
+

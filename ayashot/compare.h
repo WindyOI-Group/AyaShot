@@ -31,9 +31,9 @@ public:
         bool stop1 = false; int p1;
         bool stop2 = false; int p2;
         while (!stop1 && !stop2){
-            p1 = fread(__aya_buf1, 1, MAX_BUF, ayaout);
-            p2 = fread(__aya_buf2, 1, MAX_BUF, ayaans);
-            if (strcmp(__aya_buf1, __aya_buf2)){
+            p1 = fread(Aya::__aya_buf1, 1, Aya::MAX_BUF, ayaout);
+            p2 = fread(Aya::__aya_buf2, 1, Aya::MAX_BUF, ayaans);
+            if (strcmp(Aya::__aya_buf1, Aya::__aya_buf2)){
                 close(outf, ansf);
                 return false;
             }
@@ -57,23 +57,23 @@ public:
         while (!stop1 || !stop2){
             if (p1 == q1){
                 p1 = 0;
-                q1 = fread(__aya_buf1, 1, MAX_BUF, ayaout);
+                q1 = fread(Aya::__aya_buf1, 1, Aya::MAX_BUF, ayaout);
                 if (p1 == q1) stop1 = true;
             }
             if (p2 == q2){
                 p2 = 0;
-                q2 = fread(__aya_buf2, 1, MAX_BUF, ayaans);
+                q2 = fread(Aya::__aya_buf2, 1, Aya::MAX_BUF, ayaans);
                 if (p2 == q2) stop2 = true;
             }
             if (!stop1){
-                if (isblank(__aya_buf1[p1])) blank1++; else
-                    if (isspace(__aya_buf1[p1])){
+                if (isblank(Aya::__aya_buf1[p1])) blank1++; else
+                    if (isspace(Aya::__aya_buf1[p1])){
                         endline1++, blank1 = 0;
                     } else find1 = true;
             }
             if (!stop2){
-                if (isblank(__aya_buf2[p2])) blank2++; else
-                    if (isspace(__aya_buf2[p2])){
+                if (isblank(Aya::__aya_buf2[p2])) blank2++; else
+                    if (isspace(Aya::__aya_buf2[p2])){
                         endline2++, blank2 = 0;
                     } else find2 = true;
             }
@@ -83,7 +83,7 @@ public:
                     close(outf, ansf);
                     return false;
                 }
-                if (__aya_buf1[p1] != __aya_buf2[p2]){
+                if (Aya::__aya_buf1[p1] != Aya::__aya_buf2[p2]){
                     //log here.
                     close(outf, ansf);
                     return false;
