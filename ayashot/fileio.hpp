@@ -2,6 +2,8 @@
 
 #include"common.hpp"
 
+namespace Aya{
+
 class fileio_t{
 private:
     int32_t subtask; FILE* file;
@@ -98,3 +100,5 @@ public:
     template <typename T>
     void writeln(const T& n){ write(n), write('\n'); }
 }; 
+    
+} //namespace : Aya

@@ -3,6 +3,7 @@
 #include"common.hpp"
 #include"random.hpp"
 
+namespace Aya{
 template <typename value_type = int32_t>
 class Poly{
 public:
@@ -127,7 +128,6 @@ public:
 		for (int32_t i = 0;i < n;++i) V[i] += left - 1;
 	}
 	void permutation(std::size_t n){
-		if (n == 0){ clear(); return; }
 		sequence_unique(n);
 	}
 	void partition(std::size_t n, int32_t m, int32_t min_value = 0){
@@ -157,3 +157,4 @@ public:
 			for (int32_t i = 0;i < n;++i) V[i] += min_value;
 	}
 }; 
+} //namespace : Aya

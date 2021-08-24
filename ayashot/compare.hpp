@@ -2,6 +2,8 @@
  
 #include"common.hpp"
 
+namespace Aya{
+
 class Comparator{
 private:
     FILE* ayain, * ayaout, * ayaans;
@@ -164,3 +166,5 @@ public:
         return true;
     }
 };
+   
+} //namespace : Aya

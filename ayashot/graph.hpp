@@ -3,8 +3,9 @@
 #include "common.hpp"
 #include "random.hpp"
 
-typedef std::pair<uint64_t, uint64_t> __aya_u64_u64;
+namespace Aya{
 
+typedef std::pair<uint64_t, uint64_t> __aya_u64_u64;
 std::unordered_map <uint64_t, bool> __aya_map_id;
 std::unordered_map <uint64_t, bool> __aya_map_edges;
 
@@ -103,3 +104,5 @@ public:
 
     }
 }; 
+
+} //namespace : Aya

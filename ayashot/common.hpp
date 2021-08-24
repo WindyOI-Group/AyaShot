@@ -37,10 +37,11 @@
 
 //short for some typenames.
 
-typedef std::vector<int>   __aya_vec;
-typedef std::string        __aya_str;
 
-namespace Tools{
+
+namespace Aya{
+    typedef std::vector<int>   __aya_vec;
+    typedef std::string        __aya_str;
     namespace Float2Integer{
         enum {
             _1e3 = (int32_t)1e3, _2e3 = (int32_t)2e3, _3e3 = (int32_t)3e3, _4e3 = (int32_t)4e3, _5e3 = (int32_t)5e3,
@@ -62,7 +63,7 @@ namespace Tools{
             _1eD = (int64_t)4e18, _1eE = (int64_t)5e18
         };
     } // namespace Float2Integer
-} // namespace Tools
+} //namespace : Aya
 
 namespace Aya{
     //Hash table.
@@ -73,5 +74,4 @@ namespace Aya{
     const int MAX_BUF = 1 << 20;
     char __aya_buf1[MAX_BUF];
     char __aya_buf2[MAX_BUF]; 
-}
-
+} //namespace : Aya
