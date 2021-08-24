@@ -7,8 +7,8 @@ namespace Aya{
 class fileio_t{
 private:
     int32_t subtask; FILE* file;
-    __aya_vec N, S;
-    __aya_str P;
+    std::vector<int> N, S;
+    std::string P;
     void open(){
         if (subtask == 1)
             file = fopen((P + std::to_string(SUBTASK) + "_"
@@ -36,13 +36,13 @@ public:
     bool is_task(){ return !subtask == 0; }
     bool is_stdio(){ return !subtask == -1; }
 
-    void regist_task(const int32_t cases, __aya_str _P = ""){
+    void regist_task(const int32_t cases, std::string _P = ""){
         //log here.
         subtask = 0, P = _P;
         N.clear(), N.push_back(cases);
         SUBTASK = 0, NUMBER = 1, open();
     }
-    void regist_subtask(const int32_t cases, __aya_vec _N, __aya_vec _S, __aya_str _P = ""){
+    void regist_subtask(const int32_t cases, std::vector<int> _N, std::vector<int> _S, std::string _P = ""){
         //log here.
         subtask = 1, P = _P, N = _N, S = _S;
         SUBTASK = 0, NUMBER = 1, open();
@@ -93,7 +93,7 @@ public:
     void writef(const char* format, ...){
         va_list va; va_start(va, format); vfprintf(file, format, va); va_end(va);
     }
-    void write(const __aya_str n){ write(n.c_str()); }
+    void write(const std::string n){ write(n.c_str()); }
 
     template <typename T>
     void write(const T n);

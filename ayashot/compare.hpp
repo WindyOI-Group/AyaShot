@@ -9,7 +9,7 @@ private:
     FILE* ayain, * ayaout, * ayaans;
     bool del_tempfile = true;
 public:
-    bool open(const __aya_str outf, const __aya_str ansf){
+    bool open(const std::string outf, const std::string ansf){
         ayaout = fopen(outf.c_str(), "r");
         ayaans = fopen(ansf.c_str(), "r");
         if (ayaout == NULL){
@@ -22,10 +22,10 @@ public:
         }
         return true;
     }
-    void close(const __aya_str outf, const __aya_str ansf){
+    void close(const std::string outf, const std::string ansf){
         fclose(ayaout), fclose(ayaans);
     }
-    bool compare_bits(const __aya_str outf, const __aya_str ansf){
+    bool compare_bits(const std::string outf, const std::string ansf){
         if (!open(outf, ansf)){
             //log here.
             return false;
@@ -46,7 +46,7 @@ public:
         close(outf, ansf);
         return true;
     }
-    bool compare_noip(const __aya_str outf, const __aya_str ansf){
+    bool compare_noip(const std::string outf, const std::string ansf){
         if (!open(outf, ansf)){
             //log here.
             return false;
@@ -114,11 +114,11 @@ public:
         close(outf, ansf);
         return true;
     }
-    bool compare_custom(const __aya_str outf, const __aya_str ansf);
-    bool program(__aya_str std_program, __aya_str bf_program, __aya_str gen_program,
-        bool(Comparator::* compare)(const __aya_str, const __aya_str) = compare_noip){
+    bool compare_custom(const std::string outf, const std::string ansf);
+    bool program(std::string std_program, std::string bf_program, std::string gen_program,
+        bool(Comparator::* compare)(const std::string, const std::string) = compare_noip){
         printf("BEGIN\n");
-        __aya_str temp = "__aya_template_file", cmd;
+        std::string temp = "__aya_template_file", cmd;
         int exit_code; bool stop = false, ok = false;
         bool gen_in = false, gen_out = false, gen_ans = false;
         cmd = gen_program + " > " + temp + ".in";
@@ -151,8 +151,8 @@ public:
         }
         return ok;
     }
-    bool program_n(int n, __aya_str std_program, __aya_str bf_program, __aya_str gen_program,
-        bool(Comparator::* compare)(const __aya_str, const __aya_str) = compare_noip){
+    bool program_n(int n, std::string std_program, std::string bf_program, std::string gen_program,
+        bool(Comparator::* compare)(const std::string, const std::string) = compare_noip){
         //log here.
         bool del_tempfile0 = del_tempfile;
         del_tempfile = false;

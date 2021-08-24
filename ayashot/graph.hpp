@@ -6,8 +6,8 @@
 namespace Aya{
 
 typedef std::pair<uint64_t, uint64_t> __aya_u64_u64;
-std::unordered_map <uint64_t, bool> __aya_map_id;
-std::unordered_map <uint64_t, bool> __aya_map_edges;
+std::unordered_map <uint64_t, bool, __aya_hash_u64_t> __aya_map_id;
+std::unordered_map <uint64_t, bool, __aya_hash_u64_t> __aya_map_edges;
 
 template <typename value_type>
 struct basic_node{

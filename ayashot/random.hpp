@@ -2,6 +2,8 @@
 
 #include"common.hpp"
 
+namespace Aya{
+    
 class random_t{
 private:
     static inline uint32_t rotl(const uint32_t x, int32_t k) {
@@ -22,6 +24,15 @@ public:
     // Return a 64bits unsigned integer.
     uint64_t next64(){
         return (uint64_t) next32() << 32 | next32();
+    }
+
+    // Mix a 64bits unsigned integer.
+    // More details see http://xorshift.di.unimi.it/splitmix64.c
+    uint64_t mix64(uint64_t x) {
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
     }
 
     // Return a double in [0,1)
@@ -85,18 +96,25 @@ public:
         seed[1] =_seed >> 32;
     }
     void set_seed(const std::string _seed){
-        uint64_t _seed0 = Aya::__aya_hash_string(_seed);
+        uint64_t _seed0 = Aya::__aya_hash_str(_seed);
         seed[0] =_seed0 & 0xFFFFFFFF;
         seed[1] =_seed0 >> 32;
     }
 
     template <typename C>
     typename C::value_type any(const C& c){
-        return *(c.begin() + next32(c.size() - 1));
+        return *(c.begin() + next32(c.size()));
     }
 
     template <typename I>
     typename I::value_type any(const I& left,const I& right){
-        return *(left + next32(right - left - 1));
+        return *(left + next32(right - left));
     }
 }__aya_random;
+void set_global_seed(uint64_t seed){
+    __aya_random.set_seed(seed);
+}
+void set_global_seed(std::string seed){
+    __aya_random.set_seed(seed);
+}
+} //namespace : Aya
