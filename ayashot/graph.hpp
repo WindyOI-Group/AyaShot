@@ -29,7 +29,7 @@ struct basic_edge{
 };
 
 template <typename value_type>
-class graph_t{
+class basic_graph_t{
 private:
     using node_t = basic_node<value_type>;
     using edge_t = basic_edge<value_type>;
@@ -37,11 +37,9 @@ private:
     std::vector<edge_t> E;
     std::vector<std::vector<int32_t> > X;
     std::size_t node_size, edge_size, edge_size_real;
-
     uint32_t UUID;
 
     bool direct;
-
 public:
     int32_t get_node_size(){ return node_size; }
     int32_t get_edge_size(){ return edge_size; }
@@ -80,7 +78,19 @@ public:
     void add_nodes(size_t n){
         for(int32_t i = 0;i < n;++i) add_node();
     }
+};
 
+template <typename value_type>
+class tree_t : basic_graph_t<value_type>{
+private:
+
+public:
+    using basic = basic_graph_t<value_type>;
+    using basic::add_node;
+    using basic::add_nodes;
+    using basic::add_edge;
+    using basic::add_indirected_edge;
+    using basic::add_directed_edge;
     void chain(int32_t n){
         add_node(); for(int32_t i = 0;i < n;++i){
             int32_t u = add_node(); add_edge(u - 1, u);
@@ -103,6 +113,12 @@ public:
     void tree_sqrted(int32_t n){
 
     }
+};
+
+template <typename value_type>
+class graph_t : basic_graph_t<value_type>{
+public:
+    
 }; 
 
 } //namespace : Aya

@@ -9,11 +9,17 @@ private:
     int32_t subtask, mode; FILE* file;
     std::vector<std::size_t> N, S, M, T;
     std::string P;
+public:
+    bool is_task   (){ return mode == 0; }
+    bool is_subtask(){ return mode == 1; }
+    bool is_stdio  (){ return mode == 2; }
+private:
     void open(){
-        if (subtask == 1)
+        if(is_subtask())
             file = fopen((P + std::to_string(SUBTASK) + "_"
                 + std::to_string(NUMBER) + ".in").c_str(), "w");
         else
+        if(is_task())
             file = fopen((P + std::to_string(NUMBER) + ".in").c_str(), "w");
     }
     void close(){ fclose(file); }
@@ -30,49 +36,99 @@ private:
         do Aya::__aya_buf1[t--] = to_digit(m % b), m /= b; while (m);
         fwrite(Aya::__aya_buf1 + t + 1, 1, Aya::MAX_BUF - t, file);
     }
-    void init(){
-        N.reserve(subtask), S.reserve(subtask);
-        M.reserve(subtask), T.reserve(subtask);
-        for(int i = 0;i < subtask; ++i)
-            N.push_back(1), S.push_back(100 / subtask), M.push_back(128000), T.push_back(10000);
-        S[subtask - 1] = 100 - 100 / subtask * (subtask - 1);
-    }
 public:
     int32_t SUBTASK, NUMBER;
-    bool is_subtask(){ return mode == 0; }
-    bool is_task   (){ return mode == 1; }
-    bool is_stdio  (){ return mode == 2; }
-
+    void clear(){
+        N.clear(), M.clear(), S.clear(), T.clear();
+    }
     void regist_task(const int32_t cases, std::string _P = ""){
         //log here.
-        subtask = 1, mode = 0, P = _P;
-        N.clear(), N.push_back(cases);
+        subtask = 1, mode = 0, P = _P, clear();
+        N.push_back(cases);
         SUBTASK = 0, NUMBER = 1, open();
     }
     void regist_subtask(const int32_t cases, std::string _P = ""){
         //log here.
-        subtask = cases, mode = 1, P = _P; init();
-        SUBTASK = 0, NUMBER = 1, open();
-    }
-    template <typename value_type>
-    void set_number(const vector <value_type> V){
+        subtask = cases, mode = 1, P = _P, clear();
+        N.reserve(subtask), S.reserve(subtask);
+        M.reserve(subtask), T.reserve(subtask);
         for(int i = 0;i < subtask; ++i)
-            N[i] = static_cast<std::size_t>(V[i]);
+            N.push_back(1), S.push_back(100 / subtask), M.push_back(128000), T.push_back(1000);
+        S[subtask - 1] = 100 - 100 / subtask * (subtask - 1);
+        SUBTASK = 1, NUMBER = 1, open();
     }
-    template <typename value_type>
-    void set_memory(const vector <value_type> V){
-        for(int i = 0;i < subtask; ++i)
-            M[i] = static_cast<std::size_t>(V[i]);
+    std::size_t calculate_KB(std::string t){
+        std::size_t result = 0, type = 1, count = 0;
+        for(auto &x:t){
+            if(isupper(x)) x = x - 'A' + 'a';
+            if(isdigit(x)) result = result * 10 + x -'0';
+            if(x == 'k') type = 1;
+            if(x == 'm') type = 1e3;
+            if(x == 'g') type = 1e6;
+            if(x == '.') ++count;
+        }
+        return 1ull * result * type / std::pow(10,count);
     }
-    template <typename value_type>
-    void set_score (const vector <value_type> V){
-        for(int i = 0;i < subtask; ++i)
-            S[i] = static_cast<std::size_t>(V[i]);
+    template <typename C, typename C::value_type = 0>
+    void set_number(C V){
+        int i = 0; for(auto &x:V){
+            N[i++] = static_cast<std::size_t>(x); if(i == subtask) break;
+        }
     }
-    template <typename value_type>
-    void set_time  (const vector <value_type> V){
-        for(int i = 0;i < subtask; ++i)
-            N[i] = static_cast<std::size_t>(V[i]);
+    template <typename V, V = 0>
+    void set_number(std::initializer_list<V> I){
+        int i = 0; for(auto &x:I){
+            N[i++] = static_cast<std::size_t>(x); if(i == subtask) break;
+        }
+    }
+    template <typename C, typename C::value_type = 0>
+    void set_memory(C V){
+        int i = 0; for(auto &x:V){
+            M[i++] = static_cast<std::size_t>(x); if(i == subtask) break;
+        }
+    }
+    template <typename C,typename std::enable_if<
+        std::is_same<typename C::value_type,std::string>::value,int>::type = 0
+    >
+    void set_memory(C V){
+        int i = 0; for(auto &x:V){
+            M[i++] = calculate_KB(x); if(i == subtask) break;
+        }
+    }
+    template <typename V, V = 0>
+    void set_memory(std::initializer_list<V> I){
+        int i = 0; for(auto &x:I){
+            M[i++] = static_cast<std::size_t>(x); if(i == subtask) break;
+        }
+    }
+    void set_memory(std::initializer_list<std::string> I){
+        int i = 0; for(auto &x:I){
+            M[i++] = calculate_KB(x); if(i == subtask) break;
+        }
+    }
+    template <typename C, typename C::value_type = 0>
+    void set_score (C V){
+        int i = 0; for(auto &x:V){
+            S[i++] = static_cast<std::size_t>(x); if(i == subtask) break;
+        }
+    }
+    template <typename V, V = 0>
+    void set_score (std::initializer_list<V> I){
+        int i = 0; for(auto &x:I){
+            S[i++] = static_cast<std::size_t>(x); if(i == subtask) break;
+        }
+    }
+    template <typename C, typename C::value_type = 0>
+    void set_time  (C V){
+        int i = 0; for(auto &x:V){
+            T[i++] = static_cast<std::size_t>(x); if(i == subtask) break;
+        }
+    }
+    template <typename V, V = 0>
+    void set_time  (std::initializer_list<V> I){
+        int i = 0; for(auto &x:I){
+            T[i++] = static_cast<std::size_t>(x); if(i == subtask) break;
+        }
     }
     void set_number(std::size_t n){
         for(int i = 0;i < subtask; ++i) N[i] = n;
@@ -92,13 +148,13 @@ public:
     }
     bool next(){
         //log here.
-        if (is_stdio() || is_task()){
+        if (is_stdio()){
             //log here.
             return false;
         }
         close();
         if (NUMBER == N[SUBTASK - 1]){
-            if (SUBTASK == N.size()){
+            if (SUBTASK == subtask){
                 //log here.
                 return false;
             }
@@ -116,21 +172,21 @@ public:
             file = fopen("config.yml", "w");
             if(is_task())
                 for(int i = 0;i < N[0]; ++i){
-                    printf("%d.in:\n",i + 1);
-                    printf("  timeLimit: %d\n", T[0]);
-                    printf("  memoryLimit: %d\n", M[0]);
-                    printf("  score: %d\n", S[0]);
-                    printf("  subtaskId: %d\n", 0);
-                    puts("");
+                    fprintf(file, "%d.in:\n",i + 1);
+                    fprintf(file, "  timeLimit: %d\n", T[0]);
+                    fprintf(file, "  memoryLimit: %d\n", M[0]);
+                    fprintf(file, "  score: %d\n", S[0]);
+                    fprintf(file, "  subtaskId: %d\n", 0);
+                    fputc('\n', file);
             } else
             for(int i = 0;i < subtask; ++i){
                 for(int j = 0;j < N[i]; ++j){
-                    printf("%d_%d.in:\n",i + 1, j + 1);
-                    printf("  timeLimit: %d\n", T[i]);
-                    printf("  memoryLimit: %d\n", M[i]);
-                    printf("  score: %d\n", S[i]);
-                    printf("  subtaskId: %d\n", i);
-                    puts("");
+                    fprintf(file, "%d_%d.in:\n",i + 1, j + 1);
+                    fprintf(file, "  timeLimit: %d\n", T[i]);
+                    fprintf(file, "  memoryLimit: %d\n", M[i]);
+                    fprintf(file, "  score: %d\n", S[i]);
+                    fprintf(file, "  subtaskId: %d\n", i);
+                    fputc('\n', file);
                 }
             }
         } else {
@@ -168,6 +224,6 @@ public:
     void write(const T n);
     template <typename T>
     void writeln(const T& n){ write(n), write('\n'); }
-}; 
+};
     
 } //namespace : Aya
