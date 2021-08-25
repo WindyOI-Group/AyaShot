@@ -38,7 +38,7 @@
 //Some public tools.
 namespace Aya{
 namespace Float2Integer{
-    enum {
+    enum : int32_t{
         _1e3 = (int32_t)1e3, _2e3 = (int32_t)2e3, _3e3 = (int32_t)3e3, _4e3 = (int32_t)4e3, _5e3 = (int32_t)5e3,
         _6e3 = (int32_t)6e3, _7e3 = (int32_t)7e3, _8e3 = (int32_t)8e3, _9e3 = (int32_t)9e5,
         _1e4 = (int32_t)1e4, _2e4 = (int32_t)2e4, _3e4 = (int32_t)3e4, _4e4 = (int32_t)4e4, _5e4 = (int32_t)5e4,
@@ -53,7 +53,7 @@ namespace Float2Integer{
         _6e8 = (int32_t)6e8, _7e8 = (int32_t)7e8, _8e8 = (int32_t)8e8, _9e8 = (int32_t)9e8,
         _1e9 = (int32_t)1e9, _2e9 = (int32_t)2e9
     };
-    enum {
+    enum : int64_t{
         _1eA = (int64_t)1e18, _1eB = (int64_t)2e18, _1eC = (int64_t)3e18,
         _1eD = (int64_t)4e18, _1eE = (int64_t)5e18
     };

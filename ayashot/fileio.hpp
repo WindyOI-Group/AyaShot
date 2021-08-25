@@ -6,8 +6,8 @@ namespace Aya{
 
 class fileio_t{
 private:
-    int32_t subtask; FILE* file;
-    std::vector<int> N, S;
+    int32_t subtask, mode; FILE* file;
+    std::vector<std::size_t> N, S, M, T;
     std::string P;
     void open(){
         if (subtask == 1)
@@ -30,37 +30,75 @@ private:
         do Aya::__aya_buf1[t--] = to_digit(m % b), m /= b; while (m);
         fwrite(Aya::__aya_buf1 + t + 1, 1, Aya::MAX_BUF - t, file);
     }
+    void init(){
+        N.reserve(subtask), S.reserve(subtask);
+        M.reserve(subtask), T.reserve(subtask);
+        for(int i = 0;i < subtask; ++i)
+            N.push_back(1), S.push_back(100 / subtask), M.push_back(128000), T.push_back(10000);
+        S[subtask - 1] = 100 - 100 / subtask * (subtask - 1);
+    }
 public:
     int32_t SUBTASK, NUMBER;
-    bool is_subtask(){ return  subtask == 1; }
-    bool is_task(){ return !subtask == 0; }
-    bool is_stdio(){ return !subtask == -1; }
+    bool is_subtask(){ return mode == 0; }
+    bool is_task   (){ return mode == 1; }
+    bool is_stdio  (){ return mode == 2; }
 
     void regist_task(const int32_t cases, std::string _P = ""){
         //log here.
-        subtask = 0, P = _P;
+        subtask = 1, mode = 0, P = _P;
         N.clear(), N.push_back(cases);
         SUBTASK = 0, NUMBER = 1, open();
     }
-    void regist_subtask(const int32_t cases, std::vector<int> _N, std::vector<int> _S, std::string _P = ""){
+    void regist_subtask(const int32_t cases, std::string _P = ""){
         //log here.
-        subtask = 1, P = _P, N = _N, S = _S;
+        subtask = cases, mode = 1, P = _P; init();
         SUBTASK = 0, NUMBER = 1, open();
     }
+    template <typename value_type>
+    void set_number(const vector <value_type> V){
+        for(int i = 0;i < subtask; ++i)
+            N[i] = static_cast<std::size_t>(V[i]);
+    }
+    template <typename value_type>
+    void set_memory(const vector <value_type> V){
+        for(int i = 0;i < subtask; ++i)
+            M[i] = static_cast<std::size_t>(V[i]);
+    }
+    template <typename value_type>
+    void set_score (const vector <value_type> V){
+        for(int i = 0;i < subtask; ++i)
+            S[i] = static_cast<std::size_t>(V[i]);
+    }
+    template <typename value_type>
+    void set_time  (const vector <value_type> V){
+        for(int i = 0;i < subtask; ++i)
+            N[i] = static_cast<std::size_t>(V[i]);
+    }
+    void set_number(std::size_t n){
+        for(int i = 0;i < subtask; ++i) N[i] = n;
+    }
+    void set_memory(std::size_t n){
+        for(int i = 0;i < subtask; ++i) M[i] = n;
+    }
+    void set_score (std::size_t n){
+        for(int i = 0;i < subtask; ++i) S[i] = n;
+    }
+    void set_time  (std::size_t n){
+        for(int i = 0;i < subtask; ++i) T[i] = n;
+    }
     void regist_stdio(){
-        subtask = -1, file = stdout;
-        N.clear(), N.push_back(1);
-        SUBTASK = 0, NUMBER = 1;
+        subtask = 0, mode = -1, file = stdout;
+        SUBTASK = 1, NUMBER = 1;
     }
     bool next(){
         //log here.
-        if (subtask == -1){
+        if (is_stdio() || is_task()){
             //log here.
             return false;
         }
         close();
-        if (NUMBER == N[SUBTASK]){
-            if (SUBTASK == N.size() - 1){
+        if (NUMBER == N[SUBTASK - 1]){
+            if (SUBTASK == N.size()){
                 //log here.
                 return false;
             }
@@ -68,6 +106,37 @@ public:
         } else ++NUMBER;
         open();
         return true;
+    }
+    void gen_config(const char *mode = "luogu"){
+        if(is_stdio()){
+            //log here.
+            return;
+        }
+        if(!strcmp(mode, "luogu")){
+            file = fopen("config.yml", "w");
+            if(is_task())
+                for(int i = 0;i < N[0]; ++i){
+                    printf("%d.in:\n",i + 1);
+                    printf("  timeLimit: %d\n", T[0]);
+                    printf("  memoryLimit: %d\n", M[0]);
+                    printf("  score: %d\n", S[0]);
+                    printf("  subtaskId: %d\n", 0);
+                    puts("");
+            } else
+            for(int i = 0;i < subtask; ++i){
+                for(int j = 0;j < N[i]; ++j){
+                    printf("%d_%d.in:\n",i + 1, j + 1);
+                    printf("  timeLimit: %d\n", T[i]);
+                    printf("  memoryLimit: %d\n", M[i]);
+                    printf("  score: %d\n", S[i]);
+                    printf("  subtaskId: %d\n", i);
+                    puts("");
+                }
+            }
+        } else {
+            //log here.
+        }
+        
     }
     void write(const char  n){ fputc(n, file); }
     void write(const char* n){ fwrite(n, 1, strlen(n), file); }
