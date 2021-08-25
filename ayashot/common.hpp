@@ -63,6 +63,9 @@ namespace Alphabet{
     const std::string UPPER_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const std::string DIGIT_CHAR = "0123456789";
     const std::string BLANK_CHAR = " ";
+    const std::string HEX_UP_CHAR = "0123456789ABCDEF";
+    const std::string HEX_LW_CHAR = "0123456789abcdef";
+    const std::string SIMBLE_CHAR = "!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~";
 }
 } //namespace : Aya
 
@@ -72,7 +75,7 @@ namespace Aya{
 static const uint32_t __aya_hash_key0 = 998244353;
 static const uint32_t __aya_hash_key1 = 13331;
 struct __aya_hash_u32_t{
-    uint32_t operator ()(uint32_t w){
+    uint32_t operator ()(uint32_t w) const{
         uint64_t x =(uint64_t) w + 0x9e3779b97f4a7c15 + __aya_hash_key0;
         x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
         x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
@@ -80,7 +83,7 @@ struct __aya_hash_u32_t{
     }
 }__aya_hash_u32;
 struct __aya_hash_u64_t{
-    uint32_t operator ()(uint64_t w){
+    uint32_t operator ()(uint64_t w) const{
         w += 0x9e3779b97f4a7c15 + __aya_hash_key0;
         w = (w ^ (w >> 30)) * 0xbf58476d1ce4e5b9;
         w = (w ^ (w >> 27)) * 0x94d049bb133111eb;
@@ -88,7 +91,7 @@ struct __aya_hash_u64_t{
     }
 }__aya_hash_u64;
 struct __aya_hash_str_t{
-    uint32_t operator ()(std::string s){
+    uint32_t operator ()(std::string s) const{
         uint32_t r; for(auto &x:s) r = r * __aya_hash_key1 + x;
         return r;
     }

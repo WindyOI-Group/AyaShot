@@ -8,6 +8,41 @@ class Comparator{
 private:
     FILE* ayain, * ayaout, * ayaans;
     bool del_tempfile = true;
+    bool gen_in, gen_out, gen_ans;
+    const std::string temp = "__aya_template_file";
+public:
+
+private:
+    void pre_program(std::string std_program, std::string bf_program, std::string gen_program){
+        std::string cmd;
+        int exit_code; bool stop = false, ok = false;
+        gen_in = gen_out = gen_ans = false;
+        cmd = gen_program + " > " + temp + ".in";
+        if (exit_code = system(cmd.c_str())){
+            //log here.
+            stop = true;
+        } else gen_in = true;
+        cmd = std_program + " < " + temp + ".in"
+            + " > " + temp + ".out";
+        if (exit_code = system(cmd.c_str())){
+            //log here.
+            stop = true;
+        } else gen_out = true;
+        cmd = bf_program + " < " + temp + ".in"
+            + " > " + temp + ".ans";
+        if (exit_code = system(cmd.c_str())){
+            //log here.
+            stop = true;
+        } else gen_ans = true;
+    }
+    void suf_program(){
+        std::string temp = "__aya_template_file", cmd;
+        if (del_tempfile){
+            if (gen_in ) cmd = "del " + temp + ".in" , system(cmd.c_str());
+            if (gen_out) cmd = "del " + temp + ".out", system(cmd.c_str());
+            if (gen_ans) cmd = "del " + temp + ".ans", system(cmd.c_str());
+        }
+    }
 public:
     bool open(const std::string outf, const std::string ansf){
         ayaout = fopen(outf.c_str(), "r");
@@ -117,39 +152,13 @@ public:
     bool compare_custom(const std::string outf, const std::string ansf);
     bool program(std::string std_program, std::string bf_program, std::string gen_program,
         bool(Comparator::* compare)(const std::string, const std::string) = compare_noip){
-        printf("BEGIN\n");
-        std::string temp = "__aya_template_file", cmd;
-        int exit_code; bool stop = false, ok = false;
-        bool gen_in = false, gen_out = false, gen_ans = false;
-        cmd = gen_program + " > " + temp + ".in";
-        if (exit_code = system(cmd.c_str())){
+        pre_program(std_program, bf_program, gen_program);
+        if ((this->*compare)(temp + ".out", temp + ".ans")){
             //log here.
-            stop = true;
-        } else gen_in = true;
-        cmd = std_program + " < " + temp + ".in"
-            + " > " + temp + ".out";
-        if (exit_code = system(cmd.c_str())){
-            //log here.
-            stop = true;
-        } else gen_out = true;
-        cmd = bf_program + " < " + temp + ".in"
-            + " > " + temp + ".ans";
-        if (exit_code = system(cmd.c_str())){
-            //log here.
-            stop = true;
-        } else gen_ans = true;
-
-        if (exit_code = (this->*compare)(temp + ".out", temp + ".ans")){
-            //log here.
-            ok = true;
+            suf_program();
+            return true;
         }
-
-        if (ok && del_tempfile){
-            if (gen_in ) cmd = "del " + temp + ".in" , system(cmd.c_str());
-            if (gen_out) cmd = "del " + temp + ".out", system(cmd.c_str());
-            if (gen_ans) cmd = "del " + temp + ".ans", system(cmd.c_str());
-        }
-        return ok;
+        return false;
     }
     bool program_n(int n, std::string std_program, std::string bf_program, std::string gen_program,
         bool(Comparator::* compare)(const std::string, const std::string) = compare_noip){
@@ -165,6 +174,29 @@ public:
             system("pause");
         return true;
     }
+    bool program(std::string std_program, std::string bf_program, std::string gen_program,
+        bool(compare)(const std::string, const std::string)){
+        pre_program(std_program, bf_program, gen_program);
+        if ((compare)(temp + ".out", temp + ".ans")){
+            //log here.
+            suf_program();
+            return true;
+        }
+        return false;
+    }
+    bool program_n(int n, std::string std_program, std::string bf_program, std::string gen_program,
+        bool(*compare)(const std::string, const std::string)){
+        //log here.
+        bool del_tempfile0 = del_tempfile;
+        del_tempfile = false;
+        for(size_t TEST_CASE = 0; TEST_CASE < n; ++TEST_CASE){
+            if (!program(std_program, bf_program, gen_program, compare))
+                system("pause");
+        }
+        del_tempfile = del_tempfile0;
+        if (!program(std_program, bf_program, gen_program, compare))
+            system("pause");
+        return true;
+    }
 };
-   
 } //namespace : Aya

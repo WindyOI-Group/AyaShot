@@ -8,9 +8,11 @@ namespace Aya{
 template <typename value_type, class enable = void> class poly_t{};
 
 template<typename value_type>
-class poly_t <value_type,
-            typename std::enable_if<std::is_integral<value_type>::value
-            && ( sizeof(value_type) == 4 || sizeof(value_type) == 8)>::type>
+class poly_t <value_type,typename std::enable_if<
+			std::is_integral<value_type>::value &&
+            (sizeof(value_type) == 4 || sizeof(value_type) == 8)
+		>::type
+	>
 {
 public:
 	std::vector <value_type> V;
@@ -137,9 +139,11 @@ public:
 	}
 };
 template<typename value_type>
-class poly_t <value_type,
-            typename std::enable_if<std::is_integral<value_type>::value
-            && ( sizeof(value_type) == 1)>::type>
+class poly_t <value_type,typename std::enable_if<
+			std::is_integral<value_type>::value &&
+			(sizeof(value_type) == 1)
+		>::type
+	>
 {
 public:
     std::string S;
